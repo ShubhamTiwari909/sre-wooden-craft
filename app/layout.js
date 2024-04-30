@@ -1,3 +1,4 @@
+import Footer from "@/components/Footer";
 import "./globals.css";
 import Header from "@/components/Header";
 
@@ -9,6 +10,7 @@ export default function RootLayout({ children }) {
         <main className="mt-24">
         {children}
         </main>
+        <Footer />
       </body>
     </html>
   );
