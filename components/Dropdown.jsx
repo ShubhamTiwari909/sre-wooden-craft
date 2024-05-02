@@ -21,8 +21,8 @@ const Dropdown = ({data}) => {
       <DropdownMenuContent className="max-h-[200px] overflow-auto bg-slate-100">
         {
           data.map((item, index) => (
-            <DropdownMenuItem key={index.label}>
-              {item.link ? <Link href={item.value} className={pathname === item.value ? "text-blue-700" : ""}>{item.label}</Link> : <span>{item.label}</span>}
+            <DropdownMenuItem key={index} className="py-4">
+              {item.link ? <Link href={item.value} className={pathname === item.value ? "text-blue-700 border-b-blue-400" : ""}>{item.label}</Link> : <span>{item.label}</span>}
             </DropdownMenuItem>
           ))
         }

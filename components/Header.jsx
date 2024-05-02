@@ -3,45 +3,45 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React, { useState } from "react";
 import { Button } from "@/components/ui/Button";
-import { Input } from "@/components/ui/input";
-import { AiOutlineSearch } from "react-icons/ai";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { RiCloseCircleFill } from "react-icons/ri";
+import { FcGoogle } from "react-icons/fc";
+import { useStore } from "@/store/store";
 import Dropdown from "./Dropdown";
 
 const categories = [
   {
-    value: "/category1",
+    value: "/categories/category1",
     label: "Category 1",
     link: true,
   },
   {
-    value: "/category2",
+    value: "/categories/category2",
     label: "Category 2",
     link: true,
   },
   {
-    value: "/category3",
+    value: "/categories/category3",
     label: "Category 3",
     link: true,
   },
   {
-    value: "/category4",
+    value: "/categories/category4",
     label: "Category 4",
     link: true,
   },
   {
-    value: "/category5",
+    value: "/categories/category5",
     label: "Category 5",
     link: true,
   },
   {
-    value: "/category6",
+    value: "/categories/category6",
     label: "Category 6",
     link: true,
   },
   {
-    value: "/category7",
+    value: "/categories/category7",
     label: "Category 7",
     link: true,
   },
@@ -49,8 +49,9 @@ const categories = [
 
 const Header = () => {
   const [openMenu, setOpenMenu] = useState(false);
-  const [search, setSearch] = useState("");
   const pathname = usePathname();
+  const uniqueId = useStore((state) => state.id);
+  console.log(uniqueId);
 
   return (
     <header className="flex border-b py-4 px-4 sm:px-10 bg-white font-[sans-serif] min-h-[70px] tracking-wide fixed top-0 w-full z-100">
@@ -73,7 +74,7 @@ const Header = () => {
             id="toggleClose"
             className="lg:hidden fixed top-2 right-4 z-[100] rounded-full bg-white p-3"
           >
-            <RiCloseCircleFill size="1.5rem" color="#000000"/>
+            <RiCloseCircleFill size="1.5rem" color="#000000" />
           </Button>
 
           <ul
@@ -94,7 +95,9 @@ const Header = () => {
               <Link
                 href="/"
                 onClick={() => setOpenMenu(!openMenu)}
-                className={`lg:hover:text-[#007bff] ${pathname === "/" ? "text-[#007bff]" : "text-gray-500"} block font-semibold text-[15px]`}
+                className={`lg:hover:text-[#007bff] ${
+                  pathname === "/" ? "text-[#007bff]" : "text-gray-500"
+                } block font-semibold text-[15px]`}
               >
                 Home
               </Link>
@@ -103,7 +106,11 @@ const Header = () => {
               <Link
                 href="/categories"
                 onClick={() => setOpenMenu(!openMenu)}
-                className={`lg:hover:text-[#007bff] ${pathname === "/categories" ? "text-[#007bff]" : "text-gray-500"} block font-semibold text-[15px]`}
+                className={`lg:hover:text-[#007bff] ${
+                  pathname === "/categories"
+                    ? "text-[#007bff]"
+                    : "text-gray-500"
+                } block font-semibold text-[15px]`}
               >
                 Categories
               </Link>
@@ -113,7 +120,9 @@ const Header = () => {
               <Link
                 href="/contact"
                 onClick={() => setOpenMenu(!openMenu)}
-                className={`lg:hover:text-[#007bff] ${pathname === "/contact" ? "text-[#007bff]" : "text-gray-500"} block font-semibold text-[15px]`}
+                className={`lg:hover:text-[#007bff] ${
+                  pathname === "/contact" ? "text-[#007bff]" : "text-gray-500"
+                } block font-semibold text-[15px]`}
               >
                 Contact
               </Link>
@@ -122,14 +131,15 @@ const Header = () => {
               <Link
                 href="/about"
                 onClick={() => setOpenMenu(!openMenu)}
-                className={`lg:hover:text-[#007bff] ${pathname === "/about" ? "text-[#007bff]" : "text-gray-500"} block font-semibold text-[15px]`}
+                className={`lg:hover:text-[#007bff] ${
+                  pathname === "/about" ? "text-[#007bff]" : "text-gray-500"
+                } block font-semibold text-[15px]`}
               >
                 About
               </Link>
             </li>
           </ul>
         </div>
-
         <Button
           id="toggleOpen"
           onClick={() => setOpenMenu(!openMenu)}
@@ -137,19 +147,11 @@ const Header = () => {
         >
           <GiHamburgerMenu size="1.5rem" />
         </Button>
-
         <div className="flex lg:ml-auto max-lg:w-full">
-          <div className="flex gap-4 items-center xl:w-80 max-xl:w-full bg-slate-100 px-6 py-3 rounded outline outline-transparent">
-            <Input
-              type="text"
-              placeholder="Search..."
-              className="focus-visible:ring-blue-600"
-              onChange={(e) => setSearch(e.target.value)}
-              value={search}
-            />
-            <AiOutlineSearch size="1.5rem" color="darkgrey" />
-          </div>
-        </div>
+          <Button className="hover:bg-slate-100 hover:text-slate-900 hover:border hover:border-slate-900" onClick={() => console.log("Login")}>
+            Login with <FcGoogle size="1.2rem" className="ml-2" />
+          </Button>
+        </div>{" "}
       </div>
     </header>
   );
