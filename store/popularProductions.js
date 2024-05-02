@@ -72,3 +72,38 @@ export const products = [
     link: "/product/product12",
   },
 ];
+
+export const categories = [
+  {
+    title: "Category 1",
+    link: "/categories/category1",
+  },
+  {
+    title: "Category 2",
+    link: "/categories/category2",
+  },
+  {
+    title: "Category 3",
+    link: "/categories/category3",
+  },
+  {
+    title: "Category 4",
+    link: "/categories/category4",
+  },
+  {
+    title: "Category 5",
+    link: "/categories/category5",
+  },
+  {
+    title: "Category 6",
+    link: "/categories/category6",
+  },
+  {
+    title: "Category 7",
+    link: "/categories/category7",
+  },
+  {
+    title: "Category 8",
+    link: "/categories/category8",
+  },
+];

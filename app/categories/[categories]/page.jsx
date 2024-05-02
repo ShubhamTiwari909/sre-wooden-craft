@@ -7,7 +7,7 @@ const Product = ({ params }) => {
 
   return (
     <div>
-      <MasonryGridLayout data={products} title={categories.toUpperCase()} />
+      <MasonryGridLayout data={products} cardType={"vertical"} title={categories.toUpperCase()} />
     </div>
   );
 };

@@ -1,16 +1,19 @@
 import React from "react";
 import Link from "next/link";
 import { FaChevronRight } from "react-icons/fa";
+import Image from "next/image";
 
 export default function CardVertical({ imageLink, title, description, link }) {
   return (
     <>
       <div className="overflow-hidden rounded bg-white text-slate-500 shadow-md shadow-slate-200">
         <figure>
-          <img
+          <Image
             src={imageLink}
             alt="card image"
             className="aspect-video w-full"
+            width="300"
+            height="300"
           />
         </figure>
         <div className="p-6">

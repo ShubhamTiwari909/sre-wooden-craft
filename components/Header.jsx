@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/Button";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { RiCloseCircleFill } from "react-icons/ri";
 import { FcGoogle } from "react-icons/fc";
+import { useStore } from "@/store/store";
 import Dropdown from "./Dropdown";
 
 const categories = [
@@ -49,6 +50,8 @@ const categories = [
 const Header = () => {
   const [openMenu, setOpenMenu] = useState(false);
   const pathname = usePathname();
+  const uniqueId = useStore((state) => state.id);
+  console.log(uniqueId);
 
   return (
     <header className="flex border-b py-4 px-4 sm:px-10 bg-white font-[sans-serif] min-h-[70px] tracking-wide fixed top-0 w-full z-100">
