@@ -1,13 +1,14 @@
 "use client";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import React, { useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { RiCloseCircleFill } from "react-icons/ri";
-import { FcGoogle } from "react-icons/fc";
 import { useStore } from "@/store/store";
 import Dropdown from "./Dropdown";
+import { logout } from "../server/authentication";
+import { getSession } from "@/lib/utils";
 
 const categories = [
   {
@@ -50,8 +51,20 @@ const categories = [
 const Header = () => {
   const [openMenu, setOpenMenu] = useState(false);
   const pathname = usePathname();
-  const uniqueId = useStore((state) => state.id);
-  console.log(uniqueId);
+  const router = useRouter();
+  const isLoggedIn = useStore((state) => state.isLoggedIn);
+  const setIsLoggedIn = useStore((state) => state.setIsLoggedIn);
+
+  const uid = getSession("uid");
+
+  useEffect(() => {
+    if (!uid) {
+      router.push("/login");
+      setIsLoggedIn(false);
+    } else {
+      setIsLoggedIn(true);
+    }
+  }, [uid]);
 
   return (
     <header className="flex border-b py-4 px-4 sm:px-10 bg-white font-[sans-serif] min-h-[70px] tracking-wide fixed top-0 w-full z-100">
@@ -114,7 +127,7 @@ const Header = () => {
               >
                 Categories
               </Link>
-              <Dropdown data={categories} />
+              <Dropdown setOpenMenu={setOpenMenu} data={categories} />
             </li>
             <li className="max-lg:border-b max-lg:py-3 px-3">
               <Link
@@ -138,6 +151,17 @@ const Header = () => {
                 About
               </Link>
             </li>
+            <li className="max-lg:border-b max-lg:py-3 px-3">
+              <div className="lg:ml-auto max-lg:w-full md:hidden">
+                {isLoggedIn && (
+                  <Button
+                    onClick={() => logout().then(() => setIsLoggedIn(false))}
+                  >
+                    Logout
+                  </Button>
+                )}
+              </div>
+            </li>
           </ul>
         </div>
         <Button
@@ -147,11 +171,13 @@ const Header = () => {
         >
           <GiHamburgerMenu size="1.5rem" />
         </Button>
-        <div className="flex lg:ml-auto max-lg:w-full">
-          <Button className="hover:bg-slate-100 hover:text-slate-900 hover:border hover:border-slate-900" onClick={() => console.log("Login")}>
-            Login with <FcGoogle size="1.2rem" className="ml-2" />
-          </Button>
-        </div>{" "}
+        <div className="lg:ml-auto max-lg:w-full hidden md:block">
+          {isLoggedIn && (
+            <Button onClick={() => logout().then(() => setIsLoggedIn(false))}>
+              Logout
+            </Button>
+          )}
+        </div>
       </div>
     </header>
   );
