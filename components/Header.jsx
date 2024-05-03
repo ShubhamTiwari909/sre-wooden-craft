@@ -1,13 +1,15 @@
 "use client";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { RiCloseCircleFill } from "react-icons/ri";
 import { useStore } from "@/store/store";
 import Dropdown from "./Dropdown";
-import { logout } from "../server/authentication";
+import { signinWithGoogle, logout } from "../server/authentication";
+import { FcGoogle } from "react-icons/fc";
+
 import { getSession } from "@/lib/utils";
 
 const categories = [
@@ -51,7 +53,6 @@ const categories = [
 const Header = () => {
   const [openMenu, setOpenMenu] = useState(false);
   const pathname = usePathname();
-  const router = useRouter();
   const isLoggedIn = useStore((state) => state.isLoggedIn);
   const setIsLoggedIn = useStore((state) => state.setIsLoggedIn);
 
@@ -59,12 +60,11 @@ const Header = () => {
 
   useEffect(() => {
     if (!uid) {
-      router.push("/login");
       setIsLoggedIn(false);
     } else {
       setIsLoggedIn(true);
     }
-  }, [uid]);
+  }, [getSession("uid")]);
 
   return (
     <header className="flex border-b py-4 px-4 sm:px-10 bg-white font-[sans-serif] min-h-[70px] tracking-wide fixed top-0 w-full z-100">
@@ -152,12 +152,39 @@ const Header = () => {
               </Link>
             </li>
             <li className="max-lg:border-b max-lg:py-3 px-3">
-              <div className="lg:ml-auto max-lg:w-full md:hidden">
-                {isLoggedIn && (
+              <div className="lg:ml-auto max-lg:w-full md:hidden" suppressHydrationWarning>
+                {uid ? (
+                  <div className="flex gap-3">
+                    <Link
+                      href="/profile"
+                      onClick={() => setOpenMenu(!openMenu)}
+                      className={`lg:hover:text-[#007bff] ${
+                        pathname === "/profile"
+                          ? "text-[#007bff]"
+                          : "text-gray-500"
+                      } block font-semibold text-[15px]`}
+                    >
+                      About
+                    </Link>
+                    <Button
+                      onClick={() => logout().then(() => setIsLoggedIn(false))}
+                      suppressHydrationWarning
+                    >
+                      Profile
+                    </Button>
+                  </div>
+                ) : (
                   <Button
-                    onClick={() => logout().then(() => setIsLoggedIn(false))}
+                    className="hover:bg-slate-100 hover:text-slate-900 hover:border hover:border-slate-900"
+                    onClick={() =>
+                      signinWithGoogle().then(() => {
+                        setIsLoggedIn(true);
+                        router.push("/");
+                      })
+                    }
+                    suppressHydrationWarning
                   >
-                    Logout
+                    Login with <FcGoogle size="1.2rem" className="ml-2" />
                   </Button>
                 )}
               </div>
@@ -171,10 +198,33 @@ const Header = () => {
         >
           <GiHamburgerMenu size="1.5rem" />
         </Button>
-        <div className="lg:ml-auto max-lg:w-full hidden md:block">
-          {isLoggedIn && (
-            <Button onClick={() => logout().then(() => setIsLoggedIn(false))}>
-              Logout
+        <div className="lg:ml-auto max-lg:w-full hidden md:block" suppressHydrationWarning>
+          {isLoggedIn ? (
+            <div className="flex gap-x-6 items-center">
+              <Link
+                href="/profile"
+                onClick={() => setOpenMenu(!openMenu)}
+                className={`lg:hover:text-[#007bff] ${
+                  pathname === "/profile" ? "text-[#007bff]" : "text-gray-500"
+                } block font-semibold text-[15px]`}
+              >
+                Profile
+              </Link>
+              <Button onClick={() => logout().then(() => setIsLoggedIn(false))} suppressHydrationWarning>
+                Logout
+              </Button>
+            </div>
+          ) : (
+            <Button
+              className="hover:bg-slate-100 hover:text-slate-900 hover:border hover:border-slate-900"
+              onClick={() =>
+                signinWithGoogle().then(() => {
+                  setIsLoggedIn(true);
+                })
+              }
+              suppressHydrationWarning
+            >
+              Login with <FcGoogle size="1.2rem" className="ml-2" />
             </Button>
           )}
         </div>
